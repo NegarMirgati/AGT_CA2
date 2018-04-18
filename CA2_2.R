@@ -1,8 +1,10 @@
 #CA1_2
-
+install.packages("lsa")
 library(igraph)
 library(magrittr)
 library(R2HTML)
+library(lsa)
+
 rm(list = ls())
 
 g_net <- read.graph("/Users/Negar/Desktop/AGT_CA2/gnet.graphml", format = c("graphml"))
@@ -237,3 +239,143 @@ html_code <- paste("<table border>
 HTML(html_code,file= html_file)
 
 ########
+got_net <- read.graph("/Users/Negar/Desktop/AGT_CA2/got.graphml", format = c("graphml"))
+
+coords = layout_with_fr(got_net)
+par(mfrow=c(1,2), cex=.50)
+# plot the graph
+plot(got_net, layout=layout_on_grid, vertex.size=20, vertex.label=V(got_net)$name,
+     edge.color="black", vertex.color = "yellow")
+
+# greedy method (hiearchical, fast method)
+c1 = cluster_fast_greedy(got_net)
+plot(c1, got_net, layout=coords, edge.arrow.size = 0)
+plot(got_net, vertex.color=membership(c1), layout=coords, edge.arrow.size = 0)
+
+###Spectral community detection
+
+c2 <- cluster_leading_eigen(got_net, options=list(maxiter=1000000))
+plot(c2, got_net, layout=coords, edge.arrow.size = 0)
+plot(got_net, vertex.color=membership(c2), layout=coords, edge.arrow.size = 0)
+
+###Betweenness community detection
+
+c3 = cluster_edge_betweenness(got_net)
+
+# plot communities with shaded regions
+plot(c3, got_net, layout=coords)
+# plot communities without shaded regions
+plot(got_net, vertex.color=membership(c3), layout=coords)
+
+
+### Hierarchical clustering
+
+A = get.adjacency(got_net, sparse=FALSE)
+
+# cosine similarity
+S = cosine(A)
+
+# distance matrix
+D = 1-S
+
+# distance object
+d = as.dist(D)
+
+# average-linkage clustering method
+cc = hclust(d, method = "average")
+
+# plot dendrogram
+plot(cc)
+
+# draw blue borders around clusters
+clusters.list = rect.hclust(cc, k = 4, border="blue")
+
+# cut dendrogram at 4 clusters
+clusters = cutree(cc, k = 4)
+
+# plot graph with clusters
+plot(got_net, vertex.color=clusters, layout=coords, edge.arrow.size=0)
+
+
+# Pearson similarity
+S = cor(A, method="pearson")
+
+# distance matrix
+D = 1-S
+
+# distance object
+d = as.dist(D)
+
+# average-linkage clustering method
+cc = hclust(d, method = "average")
+
+# plot dendrogram
+plot(cc)
+
+# draw blue borders around clusters
+clusters.list = rect.hclust(cc, k = 4, border="blue")
+
+# cut dendrogram at 4 clusters
+clusters = cutree(cc, k = 4)
+
+# plot graph with clusters
+plot(got_net, vertex.color=clusters, layout=coords, edge.arrow.size=0)
+
+# global similarity
+I = diag(1, vcount(got_net));
+
+# leading eigenvalue
+l = eigen(A)$values[1]
+
+# 85% of leading eigenvalue
+alpha = 0.85 * 1/l
+
+# similarity matrix
+S = solve(I - alpha * A)
+
+# largest value
+max = max(as.vector(S))
+
+# distance matrix
+D = max-S
+
+# set null distance from a node to itself
+d = diag(D)
+D = D + diag(-d, vcount(got_net))
+
+
+# distance object
+d = as.dist(D)
+
+# average-linkage clustering method
+cc = hclust(d, method = "average")
+
+# plot dendrogram
+plot(cc)
+
+# draw blue borders around clusters
+clusters.list = rect.hclust(cc, k = 4, border="blue")
+
+# cut dendrogram 
+clusters = cutree(cc, k = 4)
+
+# plot graph with clusters
+plot(got_net, vertex.color=clusters, layout=coords, edge.arrow.size=0)
+
+# Optimal community detection
+c4 = cluster_optimal(got_net)
+
+# plot communities with shaded regions
+plot(c4, got_net, layout=coords)
+
+# plot communities without shaded regions
+plot(got_net, vertex.color=membership(c4), layout=coords, edge.arrow.size=0)
+
+# greedy performance
+round(modularity(c1) / modularity(c4),3)
+
+# spectral performance
+round(modularity(c2) / modularity(c4),3)
+
+# betweenness performance
+round(modularity(c3) / modularity(c4),3)
