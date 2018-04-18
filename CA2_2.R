@@ -50,10 +50,8 @@ undir_deg <- degree(g_net_undir)
 max_10_dir_degrees <- whichpart(dir_deg)
 max_10_undir_degrees <- whichpart(undir_deg)
 
-
 max_10_dir_degrees
 max_10_undir_degrees 
-
 
 
 # Betweenness
@@ -241,6 +239,10 @@ HTML(html_code,file= html_file)
 ########
 got_net <- read.graph("/Users/Negar/Desktop/AGT_CA2/got.graphml", format = c("graphml"))
 
+comps <- clusters(got_net, mode = "weak")
+plot(comps, got_net, layout=coords, edge.arrow.size = 0)
+groups(comps)
+
 coords = layout_with_fr(got_net)
 par(mfrow=c(1,2), cex=.50)
 # plot the graph
@@ -257,6 +259,26 @@ plot(got_net, vertex.color=membership(c1), layout=coords, edge.arrow.size = 0)
 c2 <- cluster_leading_eigen(got_net, options=list(maxiter=1000000))
 plot(c2, got_net, layout=coords, edge.arrow.size = 0)
 plot(got_net, vertex.color=membership(c2), layout=coords, edge.arrow.size = 0)
+
+### Infomap Community 
+imc <- cluster_infomap(got_net)
+plot(imc, got_net, layout=coords, edge.arrow.size = 0)
+
+### Label Propagation
+
+lpc <- cluster_label_prop(got_net, initial = NULL, fixed = NULL)
+plot(lpc, got_net, layout=coords, edge.arrow.size = 0)
+### Louvain
+lvnc <- cluster_louvain(got_net)
+plot(lvnc, got_net, layout=coords, edge.arrow.size = 0)
+
+###Spinglass
+spc <- cluster_spinglass(got_net, spins=2)
+plot(spc, got_net, layout=coords, edge.arrow.size = 0)
+
+###Walktrap
+wc <-cluster_walktrap(got_net)
+plot(wc, got_net, layout=coords, edge.arrow.size = 0)
 
 ###Betweenness community detection
 
@@ -294,7 +316,7 @@ clusters.list = rect.hclust(cc, k = 4, border="blue")
 clusters = cutree(cc, k = 4)
 
 # plot graph with clusters
-plot(got_net, vertex.color=clusters, layout=coords, edge.arrow.size=0)
+plot(got_net, vertex.color=clusters, layout=coords, edge.arrow.size=0, asp=0.7, vertex.label.cex=1 )
 
 
 # Pearson similarity
@@ -379,3 +401,26 @@ round(modularity(c2) / modularity(c4),3)
 
 # betweenness performance
 round(modularity(c3) / modularity(c4),3)
+
+
+###################
+
+dice_sim <- similarity(got_net, method = "dice")
+ds <- dice_sim[V(got_net)["Varys"], V(got_net)]   
+ds[V(got_net)["Varys"]] <- -Inf
+max_dice_sim <-  V(got_net)[ds == max(ds)] 
+max_dice_sim[1]
+
+jaccard_sim <- similarity(got_net, method = "jaccard")
+js <- jaccard_sim[V(got_net)["Varys"],  V(got_net)]   
+js[V(got_net)["Varys"]] <- -Inf
+max_jaccard_sim <-  V(got_net)[js == max(js)] 
+max_jaccard_sim[1]
+
+invl_sim <- similarity(got_net, method = "invlogweighted")
+is <- invl_sim[V(got_net)["Varys"], V(got_net)]   
+is[V(got_net)["Varys"]] <- -Inf
+max_invl_sim <-  V(got_net)[is == max(is)] 
+max_invl_sim[1]
+
+
