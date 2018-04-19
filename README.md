@@ -11,7 +11,9 @@
 https://users.dimi.uniud.it/~massimo.franceschet/R/communities.html
 
 # Random Walk Closeness Centrality
+https://en.wikipedia.org/wiki/Random_walk_closeness_centrality
 
 Random walk closeness centrality is a measure of centrality in a network, which describes the average speed with which randomly walking processes reach a node from other nodes of the network. It is similar to the closeness centrality except that the farness is measured by the expected length of a random walk rather than by the shortest path.
-
 The concept was first proposed by Noh and Rieger (2004).
+
+Consider a network with a finite number of nodes and a random walk process that starts in a certain node and proceeds from node to node along the edges. From each node, it chooses randomly the edge to be followed. In an unweighted network, the probability of choosing a certain edge is equal across all available edges, while in a weighted network it is proportional to the edge weights. A node is considered to be close to other nodes, if the random walk process initiated from any node of the network arrives to this particular node in relatively few steps on average.
