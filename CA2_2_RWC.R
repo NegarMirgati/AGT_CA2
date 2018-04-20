@@ -35,3 +35,6 @@ RWC <- apply(mean_firs_passage_t, 2, function(x) num_of_vertices / sum(x))
   #print(i)
  # RWC[1,i] <- num_of_vertices / sum(mean_firs_passage_t[,i])
 #}
+
+max_10_closeness <- whichpart(RWC)
+max_10_closeness
