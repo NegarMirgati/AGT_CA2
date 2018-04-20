@@ -2,3 +2,6 @@
 *.txt
 *.html
 *.ppt
+*.graphml
+*.png
+*.svg
