@@ -1,7 +1,7 @@
 # AGT_CA2
 
 # Centralities 
-*Hubs and Authorities
+*Hubs and Authorities : https://nlp.stanford.edu/IR-book/html/htmledition/hubs-and-authorities-1.html  
 We now develop a scheme in which, given a query, every web page is assigned two scores. One is called its hub score and the other its authority score . For any query, we compute two ranked lists of results rather than one. The ranking of one list is induced by the hub scores and that of the other by the authority scores.
 This approach stems from a particular insight into the creation of web pages, that there are two primary kinds of web pages useful as results for broad-topic searches. By a broad topic search we mean an informational query such as "I wish to learn about leukemia". There are authoritative sources of information on the topic; in this case, the National Cancer Institute's page on leukemia would be such a page. We will call such pages authorities; in the computation we are about to describe, they are the pages that will emerge with high authority scores.
 
