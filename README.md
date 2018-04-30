@@ -15,6 +15,11 @@ A good hub page is one that points to many good authorities; a good authority pa
  similarity(got_net, method = "jaccard")
  similarity(got_net, method = "invlogweighted")
 ```
+The Jaccard similarity coefficient of two vertices is the number of common neighbors divided by the number of vertices that are neighbors of at least one of the two vertices being considered. The jaccard method calculates the pairwise Jaccard similarities for some (or all) of the vertices.
+
+The Dice similarity coefficient of two vertices is twice the number of common neighbors divided by the sum of the degrees of the vertices. Methof dice calculates the pairwise Dice similarities for some (or all) of the vertices.
+
+The inverse log-weighted similarity of two vertices is the number of their common neighbors, weighted by the inverse logarithm of their degrees. It is based on the assumption that two vertices should be considered more similar if they share a low-degree common neighbor, since high-degree common neighbors are more likely to appear even by pure chance. Isolated vertices will have zero similarity to any other vertex. Self-similarities are not calculated.
 
 # Vertex Clustering Tutorial and Methods used
 https://users.dimi.uniud.it/~massimo.franceschet/R/communities.html
